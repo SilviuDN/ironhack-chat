@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" 
+        integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+
+    <title>MiniChat</title>
+</head>
+<body>
+    <h1 class="mt-5">Acceso denegado</h1>
+    <hr>
+
+    <form action="" id="myForm">
+        <div class="row">
+            <div class="col-8">
+                <input type="text" id="textMessage" class="form-control" placeholder="new message">
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary">
+                    Send
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col">
+            <ul id="myMessages" class="mt-2">
+
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js" 
+        integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const socketC = io('http://localhost:8080')
+
+        const myForm = document.querySelector('#myForm')
+        const textMessage = document.querySelector('#textMessage')
+        const myMessages = document.querySelector('#myMessages')
+
+        myForm.addEventListener('submit', (ev) => {
+
+            ev.preventDefault()
+
+            const newMessage = textMessage.value
+
+            console.log(newMessage)
+            
+            socketC.emit('message-from-user', {
+                textMessage: newMessage
+            })
+        })
+
+        socketC.on('userMessageFromServer', data => {
+                console.log(data)
+                myMessages.innerHTML += `<li>${data.textMessage}</li>`
+            })
+
+
+    </script>
+
+
+</body>
+</html>
